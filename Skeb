@@ -1,0 +1,305 @@
+-- [Services]
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+ 
+local localPlayer = Players.LocalPlayer
+local playerGui = localPlayer:WaitForChild("PlayerGui")
+ 
+-- [ScreenGui]
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "MiniAbilityGui"
+screenGui.ResetOnSpawn = false
+screenGui.IgnoreGuiInset = true
+screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+screenGui.Parent = playerGui
+ 
+-- [Draggable Control]
+local draggingEnabled = false
+ 
+local toggleLockButton = Instance.new("TextButton")
+toggleLockButton.Size = UDim2.new(0, 80, 0, 30)
+toggleLockButton.Position = UDim2.new(0.85, 0, 0.8, 0)
+toggleLockButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+toggleLockButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+toggleLockButton.FontFace = Font.new("rbxassetid://12187361718")
+toggleLockButton.TextSize = 14
+toggleLockButton.Text = "Unlock"
+toggleLockButton.ZIndex = 100
+toggleLockButton.Parent = screenGui
+Instance.new("UICorner", toggleLockButton)
+ 
+toggleLockButton.MouseButton1Click:Connect(function()
+	draggingEnabled = not draggingEnabled
+	toggleLockButton.Text = draggingEnabled and "Lock" or "Unlock"
+end)
+ 
+-- [Air State Check]
+local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+local isAirborne = false
+ 
+humanoid.StateChanged:Connect(function(_, newState)
+	isAirborne = newState == Enum.HumanoidStateType.Freefall
+end)
+ 
+-- [Animator Setup]
+local animator = humanoid:FindFirstChildOfClass("Animator") or Instance.new("Animator", humanoid)
+ 
+-- [Walking Animation]
+local walkAnim = ReplicatedStorage:WaitForChild("Animations"):WaitForChild("Emotes"):WaitForChild("skyfall")
+local walkTrack = animator:LoadAnimation(walkAnim)
+walkTrack.Looped = true
+ 
+-- [Play walking animation based on movement]
+RunService.Heartbeat:Connect(function()
+	if humanoid.MoveDirection.Magnitude > 0 then
+		if not walkTrack.IsPlaying then walkTrack:Play() end
+	else
+		if walkTrack.IsPlaying then walkTrack:Stop() end
+	end
+end)
+ 
+-- [Helper: Play Casting Sound]
+local function playCastingSound(soundId)
+	local sound = Instance.new("Sound")
+	sound.SoundId = soundId or "rbxassetid://5989943294"
+	sound.Volume = 1
+	sound.PlayOnRemove = true
+	sound.Parent = character.HumanoidRootPart
+	sound:Destroy()
+end
+ 
+-- [Simple Domain Press Tracker]
+local simpleDomainPressedOnce = false
+ 
+-- [Ability Definitions]
+local abilities = {
+	{
+		Name = "Airborne Cuts",
+		Duration = 6,
+		Execute = function()
+			playCastingSound()
+			local args = {
+				"KusakabeHandler",
+				"Neutron",
+				{ CF = character.HumanoidRootPart.CFrame, Look = character.HumanoidRootPart.CFrame.LookVector, Air = isAirborne, Pos = character.HumanoidRootPart.Position }
+			}
+			local voice = Instance.new("Sound")
+			voice.SoundId = "rbxassetid://117816245368767"
+			voice.Volume = 1
+			voice.PlayOnRemove = true
+			voice.Parent = character.HumanoidRootPart
+			voice:Destroy()
+			ReplicatedStorage:WaitForChild("remotes"):WaitForChild("base"):FireServer(unpack(args))
+		end
+	},
+	{
+		Name = "Judgement Cut",
+		Duration = 4,
+		Execute = function()
+			playCastingSound("rbxassetid://5989940114")
+			local args = {
+				"KusakabeHandler",
+				"Barrage",
+				{ CF = character.HumanoidRootPart.CFrame, Look = character.HumanoidRootPart.CFrame.LookVector, Air = isAirborne, Pos = character.HumanoidRootPart.Position }
+			}
+			ReplicatedStorage:WaitForChild("remotes"):WaitForChild("base"):FireServer(unpack(args))
+		end
+	},
+	{
+		Name = "Judgement Strike",
+		Duration = 6,
+		Execute = function()
+			playCastingSound("rbxassetid://87709303752907")
+			local args = {
+				"KusakabeHandler",
+				"Strike",
+				{ CF = character.HumanoidRootPart.CFrame, Look = character.HumanoidRootPart.CFrame.LookVector, Air = isAirborne, Pos = character.HumanoidRootPart.Position }
+			}
+			ReplicatedStorage:WaitForChild("remotes"):WaitForChild("base"):FireServer(unpack(args))
+		end
+	},
+	{
+		Name = "Simple Domain",
+		Duration = 0,
+		Execute = function()
+			if not simpleDomainPressedOnce then
+				simpleDomainPressedOnce = true
+				return
+			end
+			simpleDomainPressedOnce = false
+			playCastingSound("rbxassetid://104986533407934")
+			local args = {
+				"KusakabeHandler",
+				"Simple",
+				{ CF = character.HumanoidRootPart.CFrame, Look = character.HumanoidRootPart.CFrame.LookVector, Air = isAirborne, Pos = character.HumanoidRootPart.Position }
+			}
+			ReplicatedStorage:WaitForChild("remotes"):WaitForChild("base"):FireServer(unpack(args))
+		end
+	},
+	{
+		Name = "Twin Blades",
+		Duration = 6,
+		Execute = function()
+			playCastingSound("rbxassetid://116072427476594")
+			local args = {
+				"KusakabeHandler",
+				"Slashes",
+				{ CF = character.HumanoidRootPart.CFrame, Look = character.HumanoidRootPart.CFrame.LookVector, Air = isAirborne, Pos = character.HumanoidRootPart.Position }
+			}
+			ReplicatedStorage:WaitForChild("remotes"):WaitForChild("base"):FireServer(unpack(args))
+		end
+	}
+}
+ 
+-- [Combo Chain Definitions]
+local combos = {
+	[1] = {2},      -- Airborne Cuts → Judgement Cut
+	[2] = {3, 5},   -- Judgement Cut → Judgement Strike or Twin Blades
+	[3] = {4},      -- Judgement Strike → Simple Domain
+}
+ 
+-- [Draggable Setup]
+local function makeDraggable(guiObject)
+	local dragging, dragInput, dragStart, startPos
+	guiObject.InputBegan:Connect(function(input)
+		if not draggingEnabled then return end
+		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+			dragging = true
+			dragStart = input.Position
+			startPos = guiObject.Position
+			input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then dragging = false end
+			end)
+		end
+	end)
+	guiObject.InputChanged:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+			dragInput = input
+		end
+	end)
+	RunService.Heartbeat:Connect(function()
+		if dragging and dragInput then
+			local delta = dragInput.Position - dragStart
+			guiObject.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+		end
+	end)
+end
+ 
+-- [Combo Tracker]
+local comboLabel
+local function showComboLabel(button, nextIndexes)
+	if comboLabel then comboLabel:Destroy() end
+	if not nextIndexes or #nextIndexes == 0 then return end
+ 
+	comboLabel = Instance.new("TextLabel")
+	comboLabel.Size = UDim2.new(0, 120, 0, 50)
+	comboLabel.Position = button.Position + UDim2.new(0, 0, 0, 40)
+	comboLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+	comboLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+	comboLabel.FontFace = Font.new("rbxassetid://12187361718")
+	comboLabel.TextSize = 13
+	comboLabel.TextWrapped = true
+	comboLabel.ZIndex = 11
+	comboLabel.Text = "Combo Into:\n" .. table.concat(
+		table.create(#nextIndexes, function(i)
+			return abilities[nextIndexes[i]].Name
+		end), "\n")
+	comboLabel.Parent = screenGui
+end
+ 
+-- [Recursive Combo Runner]
+local function runCombo(index)
+	local ability = abilities[index]
+	if not ability then return end
+ 
+	ability.Execute()
+	local nextCombo = combos[index]
+	showComboLabel(buttons[index], nextCombo)
+ 
+	if nextCombo and #nextCombo > 0 then
+		task.delay(ability.Duration, function()
+			runCombo(nextCombo[1]) -- Auto execute only the first in chain
+		end)
+	end
+end
+ 
+-- [Create Buttons]
+buttons = {}
+for i, ability in ipairs(abilities) do
+	local button = Instance.new("TextButton")
+	button.Size = UDim2.new(0, 120, 0, 35)
+	button.Position = UDim2.new(0.85, 0, 0.25 + (i * 0.07), 0)
+	button.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	button.TextColor3 = Color3.fromRGB(0, 0, 0)
+	button.FontFace = Font.new("rbxassetid://12187361718")
+	button.TextSize = 14
+	button.Text = ability.Name
+	button.ZIndex = 10
+	button.Parent = screenGui
+	Instance.new("UICorner", button)
+ 
+	button.MouseButton1Click:Connect(function()
+		runCombo(i)
+	end)
+ 
+	makeDraggable(button)
+	buttons[i] = button
+end
+ 
+-- ======= Death & Respawn Handling =======
+ 
+local deathPosition = nil
+ 
+-- Connect to death event to save position
+humanoid.Died:Connect(function()
+	if character and character:FindFirstChild("HumanoidRootPart") then
+		deathPosition = character.HumanoidRootPart.Position
+	end
+end)
+ 
+-- Respawn handler
+local function onCharacterAdded(newChar)
+	character = newChar
+	humanoid = character:WaitForChild("Humanoid")
+ 
+	-- Reconnect death event for new humanoid
+	humanoid.Died:Connect(function()
+		if character and character:FindFirstChild("HumanoidRootPart") then
+			deathPosition = character.HumanoidRootPart.Position
+		end
+	end)
+ 
+	-- Wait for HumanoidRootPart and teleport if death position saved
+	local hrp = character:WaitForChild("HumanoidRootPart")
+	if deathPosition then
+		hrp.CFrame = CFrame.new(deathPosition + Vector3.new(0, 3, 0))
+		deathPosition = nil
+ 
+		-- Play spawn animation
+		local animatorNew = humanoid:FindFirstChildOfClass("Animator") or Instance.new("Animator", humanoid)
+		local spawnAnim = ReplicatedStorage:WaitForChild("Animations"):WaitForChild("Kashimo"):WaitForChild("Spawn")
+		local spawnTrack = animatorNew:LoadAnimation(spawnAnim)
+		spawnTrack:Play()
+	end
+ 
+	-- Re-setup airborne state tracking for new humanoid
+	humanoid.StateChanged:Connect(function(_, newState)
+		isAirborne = newState == Enum.HumanoidStateType.Freefall
+	end)
+ 
+	-- Setup animator and walk animation again for new character
+	animator = humanoid:FindFirstChildOfClass("Animator") or Instance.new("Animator", humanoid)
+	walkAnim = ReplicatedStorage:WaitForChild("Animations"):WaitForChild("Emotes"):WaitForChild("skyfall")
+	walkTrack = animator:LoadAnimation(walkAnim)
+	walkTrack.Looped = true
+end
+ 
+localPlayer.CharacterAdded:Connect(onCharacterAdded)
+ 
+-- In case character already exists on script run
+if localPlayer.Character then
+	onCharacterAdded(localPlayer.Character)
+end
