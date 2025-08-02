@@ -1,0 +1,566 @@
+local rnm = {
+"SpeedBlitz",
+"Grab.",
+"BLITZING PUNCH",
+"Manji Kick (Revamp)"
+}
+
+
+--code that makes it work below dont mind much of it lmao
+local lp =game.Players.LocalPlayer local char =lp.Character
+local hrp =char.HumanoidRootPart local bp =lp.Backpack
+local moveset =game:GetService("Players").LocalPlayer.PlayerGui.Main.Moveset
+local gay = moveset:GetChildren() for i, thing in ipairs(gay) do
+if thing:IsA('Frame') then for i = 1,#rnm do if tonumber(thing.Key.Text) == i 
+then thing.ItemName.Text = rnm[i] end end end end
+
+--[[
+    ManjiKickHit = "rbxassetid://82105933707384",
+DivergentFist3 = "rbxassetid://113945685481618",
+DivergentFist2 = "rbxassetid://79702200722520",
+DivergentFist1 = "rbxassetid://14771588355",
+CursedStrikeHit = "rbxassetid://16872047350",
+CrushingBlow = "rbxassetid://15432272268",
+RushHit = "rbxassetid://16827230331",
+Ultimate = "rbxassetid://16663212523",
+Cleave = "rbxassetid://16638412783",
+CursedStrike = "rbxassetid://15434683426",
+Melee4 = "rbxassetid://17177309004",
+Melee3 = "rbxassetid://17177307018",
+Melee2 = "rbxassetid://17177305963",
+Melee1 = "rbxassetid://17177304783",
+Rush = "rbxassetid://15984964491",
+FlameArrow = "rbxassetid://15934318270",
+DomainWarn = "rbxassetid://15488163846",
+MalevolentShrine = "rbxassetid://15489784732",
+ManjiKick = "rbxassetid://14841505475",
+Dismantle = "rbxassetid://18867830088",
+SlaughterDemon = "rbxassetid://16735568688",
+Melee4 = "rbxassetid://14748922700",
+Melee4 = "rbxassetid://14748922700",
+Chase = "rbxassetid://15112244663",
+Chase = "rbxassetid://15112244663",
+Down = "rbxassetid://15142443111",
+Down = "rbxassetid://15142443111",
+Up = "rbxassetid://15142441185",
+Up = "rbxassetid://15142441185",
+Melee3 = "rbxassetid://14748873813",
+Melee3 = "rbxassetid://14748873813",
+Melee2 = "rbxassetid://14748873193",
+Melee2 = "rbxassetid://14748873193",
+Melee1 = "rbxassetid://14748872179",
+Melee1 = "rbxassetid://14748872179",
+]]
+
+for i = 1,5 do 
+pcall(function() getgenv().WallCombo:Disconnect() end)
+pcall(function() getgenv().Blocking:Disconnect() end)
+pcall(function() getgenv().Idle:Disconnect() end)
+pcall(function() getgenv().Walk:Disconnect() end)
+pcall(function() getgenv().Ultimate:Disconnect() end)
+pcall(function() getgenv().Move1:Disconnect() end)
+pcall(function() getgenv().Move1B:Disconnect() end)
+pcall(function() getgenv().Move2:Disconnect() end)
+pcall(function() getgenv().Move2B:Disconnect() end)
+pcall(function() getgenv().Move3:Disconnect() end)
+pcall(function() getgenv().Move3B:Disconnect() end)
+pcall(function() getgenv().Move3BB:Disconnect() end)
+pcall(function() getgenv().Move4:Disconnect() end)
+pcall(function() getgenv().Move4B:Disconnect() end)
+pcall(function() getgenv().Move5:Disconnect() end)
+pcall(function() getgenv().Move5B:Disconnect() end)
+pcall(function() getgenv().Move6:Disconnect() end)
+pcall(function() getgenv().Move6B:Disconnect() end)
+pcall(function() getgenv().Move7:Disconnect() end)
+pcall(function() getgenv().Move7B:Disconnect() end)
+
+
+pcall(function() getgenv().M1:Disconnect() end)
+pcall(function() getgenv().M2:Disconnect() end)
+pcall(function() getgenv().M3:Disconnect() end)
+pcall(function() getgenv().M4:Disconnect() end)
+
+
+pcall(function() getgenv().UltMove1:Disconnect() end)
+pcall(function() getgenv().UltMove2:Disconnect() end)
+pcall(function() getgenv().UltMove2B:Disconnect() end)
+pcall(function() getgenv().UltMove3:Disconnect() end)
+pcall(function() getgenv().UltMove4:Disconnect() end)
+end
+task.wait(.4)
+pcall(function() for i = 1,15 do 
+    game.ReplicatedStorage.OkarunAssets:Destroy() end end)
+local v = game:GetObjects("rbxassetid://72249011932785")[1]
+v.Parent = game.ReplicatedStorage
+v.Name = 'OkarunAssets'
+function BurstVFX(cframe)
+spawn(function()
+local d = v.BurstEffect:Clone()
+d.Parent = workspace
+d:PivotTo(cframe)
+local effect1 = d.Effect1
+local effect2 = d.Effect2
+
+local cframeRandom1 = math.random(-5,5)
+local cframeRandom2 = math.random(-5,5)
+local cframeRandom3 = math.random(-5,5)
+local cframeRandom4 = math.random(-5,5)
+local cframeRandom5 = math.random(-5,5)
+local cframeRandom6 = math.random(-5,5)
+
+local sizeRandom1 = math.random(3,8)/2
+local sizeRandom2 = math.random(3,8)/2
+
+for i = 1, 10 do
+effect1.CFrame = effect1.CFrame * CFrame.Angles(cframeRandom1,cframeRandom2,cframeRandom3)
+effect2.CFrame = effect1.CFrame * CFrame.Angles(cframeRandom4,cframeRandom5,cframeRandom6)
+effect1.Size = effect1.Size + Vector3.new(sizeRandom1,0,sizeRandom1)
+effect2.Size = effect2.Size + Vector3.new(sizeRandom2,0,sizeRandom2)
+effect1.Transparency = effect1.Transparency + .8/15
+effect2.Transparency = effect2.Transparency + .8/15
+task.wait(.015) end
+
+d:Destroy()
+task.wait(4)
+d:Destroy()
+end)
+end
+function WindVFX(cframe)
+spawn(function()
+local d = v.Wind:Clone()
+d.Parent = workspace
+d:PivotTo(cframe)
+local model = d
+local twirl = model:WaitForChild("Twirl")
+spawn(function()
+for i = 1, 50 do
+twirl.CFrame = twirl.CFrame * CFrame.Angles(0,0,.5)
+twirl.Size = twirl.Size + Vector3.new(1,1,2)
+twirl.Transparency = twirl.Transparency + 1/50
+task.wait(.01) end
+end)
+for i = 1, 4 do
+local effect = model["WindBeamEffect"..i]
+spawn(function()
+for i = 1, 20 do
+effect.Attachment1.Position = Vector3.new(0,0,i/(1+.5))
+effect.Attachment2.Position = Vector3.new(0,0,-i/(1+.5))
+
+effect.Beams.Beam1.CurveSize0 = i
+effect.Beams.Beam1.CurveSize1 = -i
+effect.Beams.Beam2.CurveSize0 = -i
+effect.Beams.Beam2.CurveSize1 = i
+
+effect.Beams.Beam1.Transparency = NumberSequence.new(i/20)
+effect.Beams.Beam2.Transparency = NumberSequence.new(i/20)
+task.wait(.01) end
+end)
+wait(0.1)
+end
+wait(1)
+d:Destroy()
+end)
+end
+function LightHitEffect(cframe)
+spawn(function()
+local d = v.LightHitEffect:Clone()
+d.Parent = workspace
+d:PivotTo(cframe)
+local parent = d
+for i,v in pairs(parent:GetChildren()) do
+if v.Name == "CurveEffect" then
+local Tween = game.TweenService:Create(v, 
+TweenInfo.new(1, Enum.EasingStyle.Back, 
+Enum.EasingDirection.Out, 0, false, 0),
+{
+CFrame = v.CFrame - v.CFrame.upVector * 5,
+}):Play()
+spawn(function()
+for i = 1, 5 do
+v:WaitForChild("Beam").Transparency = NumberSequence.new(i/5)
+task.wait(.01) end
+end)
+elseif v.Name == "SmallEffect" then
+local Tween =  game.TweenService:Create(v,
+TweenInfo.new(1, Enum.EasingStyle.Back, Enum.EasingDirection.Out, 0, false, 0),
+{
+CFrame = v.CFrame + v.CFrame.rightVector * 10,
+Size = v.Size + Vector3.new(5,.2,.2),
+Transparency = 1
+}):Play()
+elseif v.Name == "BallEffect" then
+local Tween =  game.TweenService:Create(v, 
+TweenInfo.new(1, Enum.EasingStyle.Back,
+Enum.EasingDirection.Out, 0, false, 0),{
+CFrame = v.CFrame + v.CFrame.upVector * 10,
+Size = v.Size + Vector3.new(.5,20,.5),
+Transparency = 1
+}):Play()
+elseif v.Name == "ParticleEffect" then
+spawn(function()
+for i = 1, 5 do
+v.ParticleEmitter.Transparency = NumberSequence.new(i/5)
+task.wait(.01) end
+end)
+end
+end
+wait(1)
+d:Destroy()
+end)
+end
+function HeavyHitVFX(cframe)
+spawn(function()
+local d = v.HeavyHitEffect:Clone()
+d.Parent = workspace
+d:PivotTo(cframe)
+local parent = d
+for i,v in pairs(parent:GetChildren()) do
+if v.Name == "CurveEffect" then
+local Tween = game.TweenService:Create(v, 
+TweenInfo.new(1, Enum.EasingStyle.Back, Enum.EasingDirection.Out),{
+CFrame = v.CFrame - v.CFrame.upVector * 5}):Play()
+spawn(function()
+for i = 1, 5 do
+v:WaitForChild("Beam").Transparency = NumberSequence.new(i/5)
+wait() end
+end)
+elseif v.Name == "SmallEffect" then
+local Tween = game.TweenService:Create(v, 
+TweenInfo.new(1, Enum.EasingStyle.Back, Enum.EasingDirection.Out),{
+CFrame = v.CFrame + v.CFrame.rightVector * 10,
+Size = v.Size + Vector3.new(20,0,0),
+Transparency = 1
+}):Play()
+elseif v.Name == "BallEffect" then
+local Tween = game.TweenService:Create(v, 
+TweenInfo.new(1, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
+,{
+CFrame = v.CFrame + v.CFrame.upVector * 10,
+Size = v.Size + Vector3.new(.5,20,.5),
+Transparency = 1
+}):Play()
+elseif v.Name == "ParticleEffect" then
+spawn(function()
+for i = 1, 5 do
+v.ParticleEmitter.Transparency = NumberSequence.new(i/5)
+wait() end
+end)
+end
+end
+local effect1 = d.Effect1
+local effect2 = d.Effect2
+
+local cframeRandom1 = math.random(-5,5)
+local cframeRandom2 = math.random(-5,5)
+local cframeRandom3 = math.random(-5,5)
+local cframeRandom4 = math.random(-5,5)
+local cframeRandom5 = math.random(-5,5)
+local cframeRandom6 = math.random(-5,5)
+
+local sizeRandom1 = math.random(3,8)
+local sizeRandom2 = math.random(3,8)
+
+for i = 1, 10 do
+effect1.CFrame = effect1.CFrame * CFrame.Angles(cframeRandom1,cframeRandom2,cframeRandom3)
+effect2.CFrame = effect1.CFrame * CFrame.Angles(cframeRandom4,cframeRandom5,cframeRandom6)
+effect1.Size = effect1.Size + Vector3.new(sizeRandom1,0,sizeRandom1)
+effect2.Size = effect2.Size + Vector3.new(sizeRandom2,0,sizeRandom2)
+effect1.Transparency = effect1.Transparency + .6/10
+effect2.Transparency = effect2.Transparency + .6/10
+wait() end
+wait(1)
+d:Destroy()
+end)
+end
+local db = game:GetService("Debris")
+function del(i,d)
+db:AddItem(i, d)
+end
+function heavysfx(x,y,z)
+if x == nil then x = 0 end if y == nil then y = 0 end if z == nil then z = 0 end
+local v =Instance.new('Part')
+v.Transparency = 1
+v.Parent = workspace
+del(v,3)
+local RunService = game:GetService("RunService")
+local lol = RunService.RenderStepped:Connect(function(step)
+v.CFrame = workspace.CurrentCamera.CFrame*CFrame.new(x,y,z)
+end)
+task.delay(4,function()
+lol:Disconnect()
+end)
+    local s= Instance.new('Sound')
+    s.SoundId = 'rbxassetid://3201554385'
+    s.Parent=v
+    s.Volume = 1 s:Play()
+    s.PlaybackSpeed = .45
+    del(s,4)
+    local lol = Instance.new('DistortionSoundEffect')
+lol.Level = .7
+lol.Parent = s
+local lol = Instance.new('EchoSoundEffect')
+lol.DryLevel = 10
+lol.Feedback=.1
+lol.Priority=111
+lol.WetLevel=10
+lol.Delay = .01
+lol.Enabled = true
+lol.Parent = pp
+end
+
+function burstsfx(x,y,z)
+if x == nil then x = 0 end if y == nil then y = 0 end if z == nil then z = 0 end
+local v =Instance.new('Part')
+v.Transparency = 1
+v.Parent = workspace
+del(v,1)
+local RunService = game:GetService("RunService")
+local lol = RunService.RenderStepped:Connect(function(step)
+v.CFrame = workspace.CurrentCamera.CFrame*CFrame.new(x,y,z)
+end)
+task.delay(1,function()
+lol:Disconnect()
+end)
+    local s= Instance.new('Sound')
+    s.SoundId = 'rbxassetid://3201554155'
+    s.Parent=v
+    s.Volume = 1 s:Play()
+    del(s,4)
+end
+getgenv().Move1 = char.Humanoid.AnimationPlayed:Connect(function(v)
+    if v.Animation.AnimationId == "rbxassetid://15434683426" then
+        -- Play the startup/miss animation below TimePosition 1.5
+        if v.TimePosition < 1.5 then
+            local MissAnim = Instance.new("Animation")
+            MissAnim.AnimationId = "rbxassetid://121382760132081"
+            local missAnimTrack = char.Humanoid:LoadAnimation(MissAnim)
+            missAnimTrack.Priority = Enum.AnimationPriority.Action4
+            missAnimTrack:Play()
+
+            -- Stop the miss animation after it plays for 1.3 seconds
+            task.delay(1.15, function()
+                if missAnimTrack.IsPlaying then
+                    missAnimTrack:Stop()
+                end
+            end)
+
+            -- Wait until original animation reaches 1.5 to play combo
+            repeat task.wait() until v.TimePosition >= 1.75
+
+            local ComboAnim1 = Instance.new("Animation")
+            ComboAnim1.AnimationId = "rbxassetid://132609447121299"
+            local combo1Track = char.Humanoid:LoadAnimation(ComboAnim1)
+            combo1Track.Priority = Enum.AnimationPriority.Action4
+            combo1Track:Play()
+
+            -- Play the first combo for 0.6 seconds
+            task.delay(0.6, function()
+                combo1Track:Stop()
+
+                local ComboAnim2 = Instance.new("Animation")
+                ComboAnim2.AnimationId = "rbxassetid://93701672887866"
+                local combo2Track = char.Humanoid:LoadAnimation(ComboAnim2)
+                combo2Track.Priority = Enum.AnimationPriority.Action4
+                combo2Track:Play()
+
+                -- Allow the second combo to continue until the original animation ends
+                repeat task.wait() until not v.IsPlaying
+                combo2Track:Stop()
+            end)
+        end
+    end
+end)
+getgenv().Move2 = char.Humanoid.AnimationPlayed:Connect(function(v)
+if v.Animation.AnimationId == "rbxassetid://15432272268" then
+local Anim = Instance.new("Animation")
+Anim.AnimationId = "rbxassetid://111717847758922"
+local k = char.Humanoid:LoadAnimation(Anim)
+k.Priority = Enum.AnimationPriority.Action4
+k:Play()
+k.TimePosition = 0.15
+task.delay(1.2,function()
+k:AdjustSpeed(.2)
+k:Stop(.1) end)
+
+end end)
+getgenv().Move3 = char.Humanoid.AnimationPlayed:Connect(function(v)
+if v.Animation.AnimationId == "rbxassetid://14771588355" then
+local Anim = Instance.new("Animation")
+Anim.AnimationId = "rbxassetid://100645622099987"
+local k = char.Humanoid:LoadAnimation(Anim)
+k.Priority = Enum.AnimationPriority.Action4
+k:Play()
+k.TimePosition = 2.75
+task.delay(1,function()
+k:AdjustSpeed(1)
+k:Stop(.1) end)
+
+end end)
+    local tt = game.Players.LocalPlayer.PlayerGui.Main.Ultimate.Title
+                tt.Text = "NO ULT"
+                tt.TextColor3 = Color3.fromRGB(255, 255, 255)
+                tt.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                tt.BorderColor3 = Color3.fromRGB(255, 255, 0)
+--BurstVFX,LightHitEffect,HeavyHitVFX,WindVFX
+
+local function loadClothing(character)
+    -- Remove existing shirt and pants only
+    local shirt = character:FindFirstChildOfClass("Shirt")
+    if shirt then shirt:Destroy() end
+
+    local pants = character:FindFirstChildOfClass("Pants")
+    if pants then pants:Destroy() end
+
+    -- Add new Pants
+    local newPants = Instance.new("Pants")
+    newPants.PantsTemplate = 'rbxassetid://13842297231'
+    newPants.Name = 'Pants'
+    newPants.Parent = character
+
+    -- Add new Shirt
+    local newShirt = Instance.new("Shirt")
+    newShirt.ShirtTemplate = 'rbxassetid://13842296590'
+    newShirt.Name = 'Shirt'
+    newShirt.Parent = character
+end
+
+local function onCharacterAdded(character)
+    wait(getgenv().Time or 0)  -- Default to 0 if Time is nil
+    -- Don't call loadAccessories if you don't want to add accessories
+    loadClothing(character)
+end
+
+-- Connect when the character is added
+game.Players.LocalPlayer.CharacterAdded:Connect(onCharacterAdded)
+
+-- Optionally apply immediately if character already loaded
+if game.Players.LocalPlayer.Character then
+    onCharacterAdded(game.Players.LocalPlayer.Character)
+end
+
+--// Services
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+
+--// Constants
+local ANIM_ID = "rbxassetid://14382045837"
+local BASE_SPEED = 60
+local MAX_SPEED = 100
+local ACCEL_RATE = 35
+local TWEEN_TIME = 0.05
+local IDLE_STOP_DELAY = 0.1 -- how fast it cuts speed/anim on stop
+
+--// Player Setup
+local player = Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+--// Animation Setup
+local anim = Instance.new("Animation")
+anim.AnimationId = ANIM_ID
+local sprintTrack = humanoid:LoadAnimation(anim)
+sprintTrack.Looped = true
+sprintTrack:AdjustSpeed(4.5)
+
+--// State
+local currentSpeed = BASE_SPEED
+local isRunning = false
+local forceSpeed = false
+local lastMoving = false
+
+--// Smooth Speed
+local function tweenSpeed(speed)
+	TweenService:Create(humanoid, TweenInfo.new(TWEEN_TIME), { WalkSpeed = speed }):Play()
+end
+
+--// Start Super Speed
+local function startSuperSpeed()
+	if not sprintTrack.IsPlaying then
+		sprintTrack:Play()
+	end
+	sprintTrack:AdjustSpeed(4.5)
+	isRunning = true
+	forceSpeed = true
+end
+
+--// Stop Super Speed
+local function stopSuperSpeed()
+	if sprintTrack.IsPlaying then
+		sprintTrack:Stop()
+	end
+	currentSpeed = BASE_SPEED
+	isRunning = false
+	forceSpeed = false
+	tweenSpeed(16) -- Reset to default
+end
+
+--// Detect External Speed Interference & Override
+humanoid:GetPropertyChangedSignal("WalkSpeed"):Connect(function()
+	if forceSpeed and humanoid.WalkSpeed < currentSpeed - 1 then
+		-- Some script tried to slow us down — override it
+		humanoid.WalkSpeed = currentSpeed
+	end
+end)
+
+--// Main Super Speed Loop
+RunService.RenderStepped:Connect(function(dt)
+	if not humanoid or humanoid.Health <= 0 then return end
+
+	local moving = humanoid.MoveDirection.Magnitude > 0.1
+
+	if moving then
+		if not isRunning then
+			startSuperSpeed()
+		end
+
+		-- Accelerate
+		if currentSpeed < MAX_SPEED then
+			currentSpeed += ACCEL_RATE * dt
+			currentSpeed = math.min(currentSpeed, MAX_SPEED)
+		end
+
+		-- Force WalkSpeed every frame
+		humanoid.WalkSpeed = currentSpeed
+	else
+		if isRunning then
+			-- Short delay to allow micro stops (optional)
+			task.delay(IDLE_STOP_DELAY, function()
+				if humanoid.MoveDirection.Magnitude == 0 then
+					stopSuperSpeed()
+				end
+			end)
+		end
+	end
+end)
+
+--// Handle Respawn
+player.CharacterAdded:Connect(function(newChar)
+	character = newChar
+	humanoid = newChar:WaitForChild("Humanoid")
+
+	sprintTrack = humanoid:LoadAnimation(anim)
+	sprintTrack.Looped = true
+	sprintTrack:AdjustSpeed(4.5)
+
+	currentSpeed = BASE_SPEED
+	isRunning = false
+	forceSpeed = false
+end)
+local url = "https://github.com/REFLOXERING/refloshering/raw/refs/heads/main/Wally_West_Theme_My_Ordinary_Life_x_I_Got_No_Time.mp3" -- example
+local fileName = "IsthatWallyWest.mp3"  -- You can name the file however you want
+
+-- Always check and download the file
+if not isfile(fileName) then
+    writefile(fileName, game:HttpGet(url))
+end
+
+-- Create a sound object and play it
+local sound = Instance.new("Sound")
+sound.SoundId = getcustomasset(fileName)  -- Load from custom asset
+sound.Volume = 0.85  -- Set volume to desired level
+sound.Looped = true  -- Set to false to prevent looping
+sound.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui") -- Parent to PlayerGui or Workspace
+
+-- Play the sound
+sound:Play()
